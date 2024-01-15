@@ -1,0 +1,16 @@
+{
+  "name": "nfc_card_web_backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/nizaa07/nfc_card_web_backend.git",
+  "author": "nizaa07 <alfan9037@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.2"
+  }
+}
