@@ -1,5 +1,6 @@
 var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { randomBytes } = require('node:crypto');
 const process = require('node:process');
 const responseJSON = (res, code, msg, data = {}) => {
     return res.status(code).send({
@@ -37,17 +38,10 @@ const hashJWTToken = (data) => {
     }, secret, { expiresIn });
 }
 
-const generateInt = (count) => {
-    const length = count;
-    let result = '';
-
-    // Loop untuk menghasilkan digit acak sebanyak panjang yang diinginkan
-    for (let i = 0; i < length; i++) {
-        const randomDigit = Math.floor(Math.random() * 10); // Digit acak antara 0-9
-        result += randomDigit.toString();
-    }
-
-    return result;
+const generateRandromStr = (count) => {
+   
+    
+      return randomBytes(count/2).toString("hex");
 }
 
 module.exports = {
@@ -56,5 +50,5 @@ module.exports = {
     toISODate,
     hashJWTToken,
     generateOTP,
-    generateInt,
+    generateRandromStr,
 }

@@ -1,6 +1,10 @@
 const Joi = require("joi");
 
 const registerValidation = Joi.object({
+    card_number: Joi.string().max(15).required().messages({
+        'any.required': 'Nomor kartu wajib diisi.',
+        'string.max': 'Panjang nama tidak boleh melebihi 15 karakter.',
+    }),
     name: Joi.string().max(50).required().messages({
         'any.required': 'Nama wajib diisi.',
         'string.max': 'Panjang nama tidak boleh melebihi 50 karakter.',

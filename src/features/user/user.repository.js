@@ -1,11 +1,20 @@
 const prisma = require("../../core/config/db/index")
-const { generateOTP } = require("../../helper/app")
+const { generateOTP } = require("../../helper/app");
+
 
 const getUsers = async () => {
     return await prisma.users.findMany();
 }
 
 const registerRepo = async (data) => {
+
+    const card = await prisma.card.findFirst({
+        where : {
+            card_number:data.card_number,
+        }
+    });
+
+    if(card===null) return null;
 
     const registerData = await prisma.user.create({
         data: {
@@ -15,6 +24,13 @@ const registerRepo = async (data) => {
             password: data.password,
             address: data.address,
             is_active: false,
+        }
+    });
+
+    await prisma.cardUser.create({
+        data : {
+            user_id:registerData.id,
+            card_number:data.card_number
         }
     });
 

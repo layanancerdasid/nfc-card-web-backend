@@ -2,7 +2,7 @@ const { validate } = require("../../core/validation");
 const { registerValidation } = require("../../core/validation/register.validation");
 const { verifyEmailValidation } = require("../../core/validation/verify_email.validation");
 const { responseJSON, hashPassword, toISODate } = require("../../helper/app");
-const { successMessage, notFound, errorBind, emailWasUsed, wrongOtp, otpWasSend } = require("../../helper/message_response");
+const { successMessage, notFound, errorBind, emailWasUsed, wrongOtp, otpWasSend, fieldNotFound } = require("../../helper/message_response");
 
 const { registerService, verifyEmailService, checkEmailService, checkOtpService, requestOtpService } = require("../user/user.service");
 
@@ -33,13 +33,17 @@ const register = async (req, res) => {
 
         const register = await registerService(payload);
 
+        if(register === null){
+            return responseJSON(res, 400, fieldNotFound('Nomor Kartu'))
+        }
+
         //kirim otp ke email//
 
 
         return responseJSON(res, 200, successMessage.saveSuccess, register);
 
     } catch (error) {
-        return responseJSON(res, 500, errorBind);
+        return responseJSON(res, 500, errorBind(error.message));
     }
 }
 

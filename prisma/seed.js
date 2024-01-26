@@ -4,11 +4,11 @@ const prisma = require("../src/core/config/db/index");
 const process = require('node:process');
 const cardSeeder = require("./seeder/cards.seeder");
 
-// const adminSeeder = require("../prisma/seeder/admins.seeder")
+const adminSeeder = require("../prisma/seeder/admins.seeder")
 
 async function seed() {
 
-    // adminSeeder()
+    adminSeeder()
     cardSeeder()
 
 }

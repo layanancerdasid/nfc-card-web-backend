@@ -22,13 +22,21 @@ const otpWasSend = "Berhasil kirim OTP";
 const notFound = "Data tidak ditemukan";
 const wrongOtp = "Otp salah";
 const payloadLoginWrong = "Username atau password salah";
-const errorBind = "Terjadi error";
+
 const emailWasUsed = "Email sudah digunakan";
+
+const fieldNotFound = (field) => {
+    return `${field} tidak ditemukan`;
+}
+const errorBind = (error) => {
+    return `Terjadi error : ${error}`
+}
 const fieldRequired = (str) => {
     return `${str} tidak boleh kosong`
 }
 
 module.exports = {
+    fieldNotFound,
     otpWasSend,
     emailVerified,
     wrongOtp,
