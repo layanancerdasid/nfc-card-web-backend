@@ -24,6 +24,7 @@ const registerRepo = async (data) => {
             password: data.password,
             address: data.address,
             is_active: false,
+            otp : generateOTP()
         }
     });
 
@@ -34,7 +35,12 @@ const registerRepo = async (data) => {
         }
     });
 
-    return registerData;
+    const selected = {
+        email : registerData.email,
+        
+    }
+
+    return selected;
 }
 
 const verifyEmailRepo = async (data) => {
