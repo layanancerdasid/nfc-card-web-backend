@@ -11,20 +11,21 @@ datasource db {
 }
 
 model User {
-  id             String     @id @default(cuid())
-  name           String     @db.VarChar(50)
-  birthday       DateTime   @db.Date
-  email          String     @db.VarChar(50)
-  password       String     @db.VarChar(255)
-  address        String     @db.VarChar(255)
-  is_active      Boolean    @default(false) @db.TinyInt()
-  email_verified String?    @db.VarChar(50)
-  token          String?    @db.VarChar(50)
-  otp            String?    @db.Char(6)
-  image          String?    @db.VarChar(255)
-  created_at     DateTime   @default(now())
-  updated_at     DateTime   @updatedAt
-  CardUser       CardUser[]
+  id              String            @id @default(cuid())
+  name            String            @db.VarChar(50)
+  birthday        DateTime          @db.Date
+  email           String            @db.VarChar(50)
+  password        String            @db.VarChar(255)
+  address         String            @db.VarChar(255)
+  is_active       Boolean           @default(false) @db.TinyInt()
+  email_verified  String?           @db.VarChar(50)
+  token           String?           @db.VarChar(50)
+  otp             String?           @db.Char(6)
+  image           String?           @db.VarChar(255)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  CardUser        CardUser[]
+  SocialMediaUser SocialMediaUser[]
 
   @@map("users")
 }
@@ -47,6 +48,7 @@ model CardUser {
   card_number String   @db.VarChar(20)
   created_at  DateTime @default(now())
   updated_at  DateTime @updatedAt
+  is_verified Boolean  @default(false) @db.TinyInt()
   user        User     @relation(fields: [user_id], references: [id])
   card        Card     @relation(fields: [card_number], references: [card_number])
 
@@ -62,4 +64,29 @@ model Admin {
   updated_at DateTime @updatedAt
 
   @@map("admins")
+}
+
+model SocialMedia {
+  id              String            @id @default(cuid())
+  name            String            @db.VarChar(50)
+  link            String            @db.VarChar(100)
+  image           String            @db.VarChar(255)
+  created_at      DateTime          @default(now())
+  updated_at      DateTime          @updatedAt
+  SocialMediaUser SocialMediaUser[]
+
+  @@map("social_medias")
+}
+
+model SocialMediaUser {
+  id        String @id @default(cuid())
+  user_id   String @db.VarChar(255)
+  socmed_id String @db.VarChar(255)
+
+  created_at   DateTime    @default(now())
+  updated_at   DateTime    @updatedAt
+  user         User        @relation(fields: [user_id], references: [id])
+  social_media SocialMedia @relation(fields: [socmed_id], references: [id])
+
+  @@map("social_media_users")
 }

@@ -18,10 +18,12 @@ const authMessage = {
 
 const emailNotVerified = "Email belum terverifikasi";
 const emailVerified = "Berhasil verifikasi email";
+const cardVerified = "Berhasil verifikasi kartu";
 const otpWasSend = "Berhasil kirim OTP";
 const notFound = "Data tidak ditemukan";
 const wrongOtp = "Otp salah";
 const payloadLoginWrong = "Username atau password salah";
+const urlNotFound = "URL tidak ditemukan";
 
 const emailWasUsed = "Email sudah digunakan";
 
@@ -36,6 +38,8 @@ const fieldRequired = (str) => {
 }
 
 module.exports = {
+    urlNotFound,
+    cardVerified,
     fieldNotFound,
     otpWasSend,
     emailVerified,

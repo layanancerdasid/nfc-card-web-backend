@@ -3,7 +3,8 @@ const {
     verifyEmailRepo,
     checkEmailRepo,
     checkOtpRepo,
-    requestOtpRepo
+    requestOtpRepo,
+    verifyCardRepo
 } = require("../user/user.repository");
 
 const registerService = async (data) => {
@@ -31,6 +32,14 @@ const checkOtpService = async (data) => {
 
     return checkEmailRes;
 }
+
+const verifyCardService = async (data) => {
+
+    const verifyCardRes = await verifyCardRepo(data);
+
+    return verifyCardRes;
+}
+
 const requestOtpService = async (data) => {
 
     const checkEmailRes = await requestOtpRepo(data);
@@ -38,6 +47,7 @@ const requestOtpService = async (data) => {
     return checkEmailRes;
 }
 module.exports = {
+    verifyCardService,
     requestOtpService,
     checkOtpService,
     registerService,
