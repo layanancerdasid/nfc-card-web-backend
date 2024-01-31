@@ -1,6 +1,7 @@
 const {
   createSocMedRepo,
   updateSocMedRepo,
+  deleteSocmedRepo,
 } = require("./social_media.repository");
 
 const createSocMedService = async (data) => {
@@ -14,7 +15,14 @@ const updateSocMedService = async (data, id) => {
   return res;
 };
 
+const deleteSocmedService = async (data, id) => {
+  const res = await deleteSocmedRepo(data, id);
+
+  return res;
+};
+
 module.exports = {
+  deleteSocmedService,
   updateSocMedService,
   createSocMedService,
 };

@@ -79,10 +79,10 @@ model SocialMedia {
 }
 
 model SocialMediaUser {
-  id        String @id @default(cuid())
-  user_id   String @db.VarChar(255)
-  socmed_id String @db.VarChar(255)
-
+  id           String      @id @default(cuid())
+  user_id      String      @db.VarChar(255)
+  socmed_id    String      @db.VarChar(255)
+  link         String      @db.VarChar(100)
   created_at   DateTime    @default(now())
   updated_at   DateTime    @updatedAt
   user         User        @relation(fields: [user_id], references: [id])

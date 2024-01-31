@@ -25,8 +25,6 @@ const updateSocMedRepo = async (data, id) => {
     };
   }
 
-  console.log(id);
-
   return await prisma.socialMedia.update({
     where: {
       id,
@@ -35,7 +33,16 @@ const updateSocMedRepo = async (data, id) => {
   });
 };
 
+const deleteSocmedRepo = async (id) => {
+  return await prisma.socialMedia.delete({
+    where: {
+      id,
+    },
+  });
+};
+
 module.exports = {
+  deleteSocmedRepo,
   updateSocMedRepo,
   createSocMedRepo,
 };

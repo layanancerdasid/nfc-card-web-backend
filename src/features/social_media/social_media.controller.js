@@ -7,10 +7,37 @@ const { errorBind, successMessage } = require("../../helper/message_response");
 const {
   createSocMedService,
   updateSocMedService,
+  deleteSocmedService,
 } = require("./social_media.service");
 const fs = require("fs");
 const path = require("path");
 const base64Img = require("base64-img");
+const prisma = require("../../core/config/db");
+
+const getAllSocMed = async (req, res) => {
+  try {
+    const page = req.params.page || 1;
+    const per_page = req.params.per_page || 10;
+    const skip = (page - 1) * per_page;
+    const result = await prisma.socialMedia.findMany({
+      take: page,
+      skip,
+    });
+
+    const resultCount = await prisma.socialMedia.count();
+
+    const totalPage = Math.ceil(resultCount / per_page);
+
+    return responseJSON(res, 200, successMessage.getSuccess, {
+      page: page - 0,
+      total_page: totalPage,
+      total_data: resultCount,
+      data: result,
+    });
+  } catch (error) {
+    return responseJSON(res, 500, errorBind(error.message));
+  }
+};
 
 const createSocMed = async (req, res) => {
   try {
@@ -104,7 +131,33 @@ const updateSocmed = async (req, res) => {
   }
 };
 
+const deleteSocmed = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const socmed = await prisma.socialMedia.findFirst({
+      where: {
+        id: id,
+      },
+    });
+
+    const splitOldImage = socmed.image.split("/");
+
+    const pathImgOld = path.join(basePath, "uploads/socmed", splitOldImage[5]);
+
+    fs.unlinkSync(pathImgOld);
+
+    await deleteSocmedService(id);
+
+    return responseJSON(res, 200, successMessage.deleteSuccess);
+  } catch (error) {
+    return responseJSON(res, 500, errorBind(error.message));
+  }
+};
+
 module.exports = {
+  getAllSocMed,
+  deleteSocmed,
   createSocMed,
   updateSocmed,
 };
