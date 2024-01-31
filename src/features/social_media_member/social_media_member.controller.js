@@ -1,7 +1,11 @@
 const { validate } = require("../../core/validation");
 
 const { responseJSON } = require("../../helper/app");
-const { errorBind, successMessage } = require("../../helper/message_response");
+const {
+  errorBind,
+  successMessage,
+  isExist,
+} = require("../../helper/message_response");
 const prisma = require("../../core/config/db");
 const {
   socialMediaMemberValidation,
@@ -24,17 +28,14 @@ const getAllSocMed = async (req, res) => {
       },
     });
 
-    // const formattedData = result.map((socialMedia) => ({
-    //   id: socialMedia.id,
-    //   name: socialMedia.name,
-    //   link: socialMedia.link,
-    //   image: socialMedia.image,
-    //   created_at: socialMedia.created_at,
-    //   updated_at: socialMedia.updated_at,
-    //   social_media_user: socialMedia.SocialMediaUser[0],
-    // }));
+    const formattedData = result.map((socialMedia) => ({
+      id: socialMedia.id,
+      link: socialMedia.link,
+      image: socialMedia.image,
+      social_media: socialMedia.social_media,
+    }));
 
-    return responseJSON(res, 200, successMessage.getSuccess, result);
+    return responseJSON(res, 200, successMessage.getSuccess, formattedData);
   } catch (error) {
     return responseJSON(res, 500, errorBind(error.message));
   }
@@ -49,11 +50,61 @@ const createSocMed = async (req, res) => {
     if (errorValidation !== null)
       return responseJSON(res, 400, errorValidation);
 
+    const isExistsSocmed = await prisma.socialMediaUser.findFirst({
+      where: {
+        user_id: payload.user_id,
+        socmed_id: payload.socmed_id,
+      },
+    });
+
+    if (isExistsSocmed != {}) {
+      return responseJSON(res, 400, isExist("Sosial media"));
+    }
+
     const r = await prisma.socialMediaUser.create({
       data: payload,
     });
 
-    return responseJSON(res, 200, "OK", r);
+    return responseJSON(res, 200, successMessage.saveSuccess, r);
+  } catch (error) {
+    return responseJSON(res, 500, errorBind(error.message));
+  }
+};
+
+const updateSocmed = async (req, res) => {
+  try {
+    const payload = req.body;
+
+    const id = req.params.id;
+
+    const errorValidation = validate(socialMediaMemberValidation, payload);
+    if (errorValidation !== null)
+      return responseJSON(res, 400, errorValidation);
+
+    const r = await prisma.socialMediaUser.update({
+      where: {
+        id,
+      },
+      data: payload,
+    });
+
+    return responseJSON(res, 200, successMessage.updateSuccess, r);
+  } catch (error) {
+    return responseJSON(res, 500, errorBind(error.message));
+  }
+};
+
+const deleteSocmed = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    await prisma.socialMediaUser.delete({
+      where: {
+        id,
+      },
+    });
+
+    return responseJSON(res, 200, successMessage.deleteSuccess);
   } catch (error) {
     return responseJSON(res, 500, errorBind(error.message));
   }
@@ -62,4 +113,6 @@ const createSocMed = async (req, res) => {
 module.exports = {
   getAllSocMed,
   createSocMed,
+  updateSocmed,
+  deleteSocmed,
 };

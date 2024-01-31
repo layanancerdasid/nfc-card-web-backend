@@ -3,6 +3,9 @@ const jwt = require("jsonwebtoken");
 const { randomBytes } = require("node:crypto");
 const path = require("path");
 const process = require("node:process");
+
+const secret = process.env.JWT_SECRET;
+
 const responseJSON = (res, code, msg, data = {}) => {
   return res.status(code).send({
     code: code ?? 200,
@@ -35,22 +38,34 @@ const toISODate = (date) => {
 };
 
 const hashJWTToken = (data) => {
-  const secret = process.env.JWT_SECRET;
-
-  const expiresIn = process.env.JWT_TTL;
-
+  const expirationTime = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
   return jwt.sign(
     {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      birthday: data.birthday,
-      address: data.address,
-      is_active: data.is_active,
+      exp: expirationTime,
+      data: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        birthday: data.birthday,
+        address: data.address,
+        is_active: data.is_active,
+      },
     },
-    secret,
-    { expiresIn }
+    secret
   );
+};
+
+const decodeJWTToken = (data) => {
+  const decoded = jwt.verify(data, secret);
+  return decoded;
+};
+
+const getToken = (data) => {
+  if (typeof data.authorization !== "undefined") {
+    const token = data.authorization.split(" ");
+    return token[1];
+  }
+  return {};
 };
 
 const generateRandromStr = (count) => {
@@ -58,6 +73,8 @@ const generateRandromStr = (count) => {
 };
 
 module.exports = {
+  getToken,
+  decodeJWTToken,
   basePath,
   getURL,
   responseJSON,

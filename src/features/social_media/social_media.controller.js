@@ -20,7 +20,7 @@ const getAllSocMed = async (req, res) => {
     const per_page = req.params.per_page || 10;
     const skip = (page - 1) * per_page;
     const result = await prisma.socialMedia.findMany({
-      take: page,
+      take: per_page,
       skip,
     });
 
@@ -48,6 +48,7 @@ const createSocMed = async (req, res) => {
 
     if (errorValidation !== null)
       return responseJSON(res, 400, errorValidation);
+
     await base64Img.img(
       payload.image,
       "./public/uploads/socmed",

@@ -24,6 +24,10 @@ router.post("/login/member", authController.loginMember);
 
 router.post("/member/register", userController.register);
 
+router.post("/member/forgot", userController.changePasswordFromForgot);
+
+router.post("/member/change_password", userController.changePassword);
+
 router.post("/member/verify/email", userController.verifyEmail);
 
 router.post("/member/verify/card", userController.verifyCard);
@@ -34,8 +38,13 @@ router.get("/member/social_media/:id", socMedMemberController.getAllSocMed);
 
 router.post("/member/social_media", socMedMemberController.createSocMed);
 
+router.put("/member/social_media/:id", socMedMemberController.updateSocmed);
+
+router.delete("/member/social_media/:id", socMedMemberController.deleteSocmed);
+
 // ROUTER ADMIN
 router.get("/admin/social_media", socMedController.getAllSocMed);
+
 router.post("/admin/social_media", socMedController.createSocMed);
 
 router.put("/admin/social_media/:id", socMedController.updateSocmed);

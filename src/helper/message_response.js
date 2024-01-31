@@ -24,11 +24,16 @@ const cardVerified = "Berhasil verifikasi kartu";
 const otpWasSend = "Berhasil kirim OTP";
 const notFound = "Data tidak ditemukan";
 const wrongOtp = "Otp salah";
+const wrongPwd = "Password salah";
+const successChangePwd = "Berhasil ubah password";
 const payloadLoginWrong = "Username atau password salah";
+const cardNotConnected = "Kartu belum terhubung";
 const urlNotFound = "URL tidak ditemukan";
 
 const emailWasUsed = "Email sudah digunakan";
-
+const isExist = (field) => {
+  return `${field} sudah ada`;
+};
 const fieldNotFound = (field) => {
   return `${field} tidak ditemukan`;
 };
@@ -40,6 +45,10 @@ const fieldRequired = (str) => {
 };
 
 module.exports = {
+  cardNotConnected,
+  successChangePwd,
+  wrongPwd,
+  isExist,
   urlNotFound,
   cardVerified,
   fieldNotFound,
