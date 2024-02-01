@@ -23,7 +23,7 @@ const registerRepo = async (data) => {
       password: data.password,
       address: data.address,
       is_active: false,
-      otp: generateOTP(),
+      otp: data.otp,
     },
   });
 

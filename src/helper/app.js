@@ -5,7 +5,9 @@ const path = require("path");
 const process = require("node:process");
 
 const secret = process.env.JWT_SECRET;
-
+const baseUrl = (req) => {
+  return req.protocol + "://" + req.get("host");
+};
 const responseJSON = (res, code, msg, data = {}) => {
   return res.status(code).send({
     code: code ?? 200,
@@ -73,6 +75,7 @@ const generateRandromStr = (count) => {
 };
 
 module.exports = {
+  baseUrl,
   getToken,
   decodeJWTToken,
   basePath,

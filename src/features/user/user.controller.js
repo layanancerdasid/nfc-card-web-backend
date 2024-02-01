@@ -14,6 +14,9 @@ const {
   hashPassword,
   toISODate,
   decodeJWTToken,
+  generateOTP,
+  baseUrl,
+  generateRandromStr,
 } = require("../../helper/app");
 const {
   successMessage,
@@ -31,6 +34,8 @@ const {
 
 const bcrypt = require("bcryptjs");
 
+const nodeMailer = require("nodemailer");
+
 const {
   registerService,
   verifyEmailService,
@@ -39,6 +44,7 @@ const {
   requestOtpService,
   verifyCardService,
 } = require("../user/user.service");
+const { htmlTemplate } = require("../../helper/template_send_email");
 
 const getAllUser = async (req, res) => {
   try {
@@ -50,6 +56,8 @@ const getAllUser = async (req, res) => {
 
 const register = async (req, res) => {
   try {
+    const randomStr = generateRandromStr(7);
+
     const payload = req.body;
 
     const errorValidation = validate(registerValidation, payload);
@@ -65,13 +73,44 @@ const register = async (req, res) => {
 
     payload.birthday = toISODate(payload.birthday);
 
+    payload.otp = generateOTP();
+
     const register = await registerService(payload);
 
     if (register === null) {
       return responseJSON(res, 400, fieldNotFound("Nomor Kartu"));
     }
 
-    //kirim otp ke email//
+    const transporter = nodeMailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "layanancerdasdev@gmail.com",
+        pass: "tnjpwdvcdfuktfkc",
+      },
+    });
+
+    const info = await transporter.sendMail({
+      from: "Official POD-EX <layanancerdasdev@gmail.com>",
+      to: "assegaf.iqbal99@gmail.com",
+      subject: "Selamat Datang Pengguna POD-EX",
+      html: htmlTemplate({
+        req,
+        name: payload.name,
+        otp: payload.otp,
+        str_body_image: randomStr,
+      }),
+      attachments: [
+        {
+          filename: "image.png",
+          path: `${baseUrl(req)}/images/3143370.png`,
+          cid: randomStr,
+        },
+      ],
+    });
+
+    console.log(`Message sent : ${info.messageId}`);
 
     return responseJSON(res, 200, successMessage.saveSuccess, register);
   } catch (error) {
@@ -214,6 +253,18 @@ const changePassword = async (req, res) => {
     return responseJSON(res, 500, errorBind(error.message));
   }
 };
+
+// const changeEmail = async (req, res) => {
+//     try {
+
+//     } catch (error) {
+//         return responseJSON(res, 500, errorBind(error.message));
+//     }
+// }
+
+// const getAllUser = async (req, res) => {
+
+// }
 
 module.exports = {
   changePassword,

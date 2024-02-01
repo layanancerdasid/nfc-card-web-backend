@@ -32,6 +32,7 @@ const loginMember = async (req, res) => {
     );
 
     if (!isVerifiedPwd) return responseJSON(res, 400, payloadLoginWrong);
+
     const profile = {
       id: user.id,
       name: user.name,
