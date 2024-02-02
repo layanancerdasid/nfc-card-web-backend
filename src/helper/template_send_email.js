@@ -1,5 +1,3 @@
-const { baseUrl } = require("./app");
-
 const htmlTemplate = (data) => {
   return `<!DOCTYPE html>
 
@@ -508,13 +506,11 @@ const htmlTemplate = (data) => {
                                          
                                            <img
                                                 align="center"
-                                                alt="${baseUrl(
-                                                  data.req
-                                                )}/images/3143370.png"
+                                                alt="Welcome"
                                                 class="icon"
                                                 height="128"
                                                 
-                                                src="cid:${data.str_body_image}"
+                                                src="cid:image_body"
                                                 style="
                                                   display: block;
                                                   height: auto;
@@ -556,7 +552,7 @@ const htmlTemplate = (data) => {
                                           color: #4f5aba;
                                           direction: ltr;
                                           font-family: 'Noto Serif', Georgia, serif;
-                                          font-size: 30px;
+                                          font-size: 26px;
                                           font-weight: 700;
                                           letter-spacing: normal;
                                           line-height: 120%;
@@ -567,8 +563,7 @@ const htmlTemplate = (data) => {
                                         "
                                       >
                                         <span class="tinyMce-placeholder"
-                                          >Hai ${data.name}, Selamat datang di
-                                          POD-EX</span
+                                          >Hai ${data.name}</span
                                         >
                                       </h1>
                                     </td>
@@ -610,10 +605,7 @@ const htmlTemplate = (data) => {
                                         "
                                       >
                                         <p style="margin-top: 20px">
-                                          Kami telah menerima permintaan untuk
-                                          memverifikasi alamat email Anda di POD-EX.
-                                          Untuk memverifikasi alamat email Anda,
-                                          silakan masukkan kode OTP ini:
+                                         ${data.str_body_msg}
                                         </p>
                                       </div>
                                     </td>

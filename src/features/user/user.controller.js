@@ -17,6 +17,7 @@ const {
   generateOTP,
   baseUrl,
   generateRandromStr,
+  sendEmail,
 } = require("../../helper/app");
 const {
   successMessage,
@@ -30,11 +31,11 @@ const {
   cardVerified,
   wrongPwd,
   successChangePwd,
+  emailBodyMsgRegis,
+  emailBodyMsgForgot,
 } = require("../../helper/message_response");
 
 const bcrypt = require("bcryptjs");
-
-const nodeMailer = require("nodemailer");
 
 const {
   registerService,
@@ -44,7 +45,6 @@ const {
   requestOtpService,
   verifyCardService,
 } = require("../user/user.service");
-const { htmlTemplate } = require("../../helper/template_send_email");
 
 const getAllUser = async (req, res) => {
   try {
@@ -81,36 +81,21 @@ const register = async (req, res) => {
       return responseJSON(res, 400, fieldNotFound("Nomor Kartu"));
     }
 
-    const transporter = nodeMailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "layanancerdasdev@gmail.com",
-        pass: "tnjpwdvcdfuktfkc",
-      },
-    });
-
-    const info = await transporter.sendMail({
-      from: "Official POD-EX <layanancerdasdev@gmail.com>",
-      to: "assegaf.iqbal99@gmail.com",
-      subject: "Selamat Datang Pengguna POD-EX",
-      html: htmlTemplate({
-        req,
+    await sendEmail(
+      {
         name: payload.name,
         otp: payload.otp,
         str_body_image: randomStr,
-      }),
-      attachments: [
+        str_body_msg: emailBodyMsgRegis,
+      },
+      [
         {
           filename: "image.png",
           path: `${baseUrl(req)}/images/3143370.png`,
           cid: randomStr,
         },
-      ],
-    });
-
-    console.log(`Message sent : ${info.messageId}`);
+      ]
+    );
 
     return responseJSON(res, 200, successMessage.saveSuccess, register);
   } catch (error) {
@@ -165,12 +150,19 @@ const requestOtp = async (req, res) => {
     const payload = req.body;
 
     const checkEmail = await checkEmailService(payload);
-
     if (checkEmail === null) return responseJSON(res, 400, notFound);
+
+    payload.otp = generateOTP();
 
     await requestOtpService(payload);
 
-    return responseJSON(res, 200, otpWasSend, {});
+    await sendEmail(req, "Uh-oh! Lupa Password?😉", payload.email, {
+      name: checkEmail.name,
+      otp: payload.otp,
+      str_body_msg: emailBodyMsgForgot,
+    });
+
+    return responseJSON(res, 200, otpWasSend);
   } catch (error) {
     return responseJSON(res, 500, errorBind(error.message));
   }

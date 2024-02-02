@@ -30,7 +30,20 @@ const payloadLoginWrong = "Username atau password salah";
 const cardNotConnected = "Kartu belum terhubung";
 const urlNotFound = "URL tidak ditemukan";
 
+const emailBodyMsgRegis = `Kami telah menerima permintaan untuk
+memverifikasi alamat email Anda di POD-EX.
+Untuk memverifikasi alamat email Anda,
+silakan masukkan kode OTP ini:`;
+
+const emailBodyMsgForgot = `Kami telah menerima permintaan untuk mereset kata sandi Anda di POD-EX.
+Untuk melanjutkan proses reset kata sandi, silakan masukkan kode OTP ini:`;
+
 const emailWasUsed = "Email sudah digunakan";
+
+const maxInput = (field) => {
+  return `Maksimal input ${field}`;
+};
+
 const isExist = (field) => {
   return `${field} sudah ada`;
 };
@@ -45,6 +58,9 @@ const fieldRequired = (str) => {
 };
 
 module.exports = {
+  maxInput,
+  emailBodyMsgForgot,
+  emailBodyMsgRegis,
   cardNotConnected,
   successChangePwd,
   wrongPwd,

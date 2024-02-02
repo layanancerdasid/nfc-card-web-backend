@@ -1,8 +1,15 @@
 var bcrypt = require("bcryptjs");
+
 const jwt = require("jsonwebtoken");
+
 const { randomBytes } = require("node:crypto");
+
 const path = require("path");
+
 const process = require("node:process");
+
+const nodeMailer = require("nodemailer");
+const { htmlTemplate } = require("./template_send_email");
 
 const secret = process.env.JWT_SECRET;
 const baseUrl = (req) => {
@@ -74,7 +81,33 @@ const generateRandromStr = (count) => {
   return randomBytes(count / 2).toString("hex");
 };
 
+const sendEmail = async (req, subject, to, payload, attachments) => {
+  const transporter = nodeMailer.createTransport({
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    secure: true,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+  return await transporter.sendMail({
+    from: process.env.MAIL_FROM,
+    to,
+    subject,
+    html: htmlTemplate(payload),
+    attachments: attachments ?? [
+      {
+        filename: "image.png",
+        path: `${baseUrl(req)}/images/3143370.png`,
+        cid: "image_body",
+      },
+    ],
+  });
+};
+
 module.exports = {
+  sendEmail,
   baseUrl,
   getToken,
   decodeJWTToken,

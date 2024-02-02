@@ -1,5 +1,4 @@
 const prisma = require("../../core/config/db/index");
-const { generateOTP } = require("../../helper/app");
 const { fieldNotFound } = require("../../helper/message_response");
 
 const getUsers = async () => {
@@ -111,13 +110,13 @@ const requestOtpRepo = async (data) => {
       email: data.email,
     },
   });
-  const otpHash = generateOTP();
+
   const otp = await prisma.user.update({
     where: {
       id: userByEmail.id,
     },
     data: {
-      otp: otpHash,
+      otp: data.otp,
     },
   });
 

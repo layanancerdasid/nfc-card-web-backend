@@ -3,6 +3,7 @@ const express = require("express");
 const userController = require("../features/user/user.controller");
 
 const authController = require("../features/auth/auth.controller");
+const cardController = require("../features/card/card.controller");
 
 const socMedController = require("../features/social_media/social_media.controller");
 const socMedMemberController = require("../features/social_media_member/social_media_member.controller");
@@ -50,5 +51,7 @@ router.post("/admin/social_media", socMedController.createSocMed);
 router.put("/admin/social_media/:id", socMedController.updateSocmed);
 
 router.delete("/admin/social_media/:id", socMedController.deleteSocmed);
+
+router.post("/admin/card", cardController.generateCard);
 
 module.exports = router;
