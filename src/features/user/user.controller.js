@@ -83,7 +83,7 @@ const register = async (req, res) => {
 
     await sendEmail(
       req,
-      "Uh-oh! Lupa Password?😉",
+      "Selamat datang pengguna baru POD-EX🤩",
       payload.email,
       {
         name: payload.name,
