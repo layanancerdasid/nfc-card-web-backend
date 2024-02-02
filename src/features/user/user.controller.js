@@ -82,6 +82,9 @@ const register = async (req, res) => {
     }
 
     await sendEmail(
+      req,
+      "Uh-oh! Lupa Password?😉",
+      payload.email,
       {
         name: payload.name,
         otp: payload.otp,
