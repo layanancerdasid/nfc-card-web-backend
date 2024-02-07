@@ -4,6 +4,7 @@ const {
   payloadLoginWrong,
   emailNotVerified,
   cardNotConnected,
+  errorBind,
 } = require("../../helper/message_response");
 const { checkAccountService } = require("./auth.service");
 const bcrypt = require("bcryptjs");
@@ -20,7 +21,9 @@ const loginMember = async (req, res) => {
       return responseJSON(res, 400, emailNotVerified);
 
     const isVerifiedCard = await prisma.cardUser.findFirst({
-      email: payload.email,
+      where: {
+        user_id: user.id,
+      },
     });
 
     if (isVerifiedCard.is_verified == false)
@@ -48,7 +51,7 @@ const loginMember = async (req, res) => {
       profile,
     });
   } catch (error) {
-    return responseJSON(res, 500, error.message);
+    return responseJSON(res, 500, errorBind(error.message));
   }
 };
 

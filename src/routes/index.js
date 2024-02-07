@@ -7,6 +7,7 @@ const cardController = require("../features/card/card.controller");
 
 const socMedController = require("../features/social_media/social_media.controller");
 const socMedMemberController = require("../features/social_media_member/social_media_member.controller");
+const middleware = require("../middleware");
 
 const router = express.Router();
 
@@ -35,7 +36,11 @@ router.post("/member/verify/card", userController.verifyCard);
 
 router.post("/member/request_otp", userController.requestOtp);
 
-router.get("/member/social_media/:id", socMedMemberController.getAllSocMed);
+router.get(
+  "/member/social_media/:id",
+  middleware,
+  socMedMemberController.getAllSocMed
+);
 
 router.post("/member/social_media", socMedMemberController.createSocMed);
 

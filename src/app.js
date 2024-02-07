@@ -6,7 +6,12 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://103.152.119.203:3002",
+    credentials: true,
+  })
+);
 
 app.use(express.static("public"));
 
