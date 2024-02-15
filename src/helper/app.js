@@ -34,7 +34,15 @@ const basePath = path.join(
 );
 
 const generateOTP = () => {
-  return `${Math.floor(1000 + Math.random() * 9000 * 90)}`;
+  let randomNumber = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+
+  let otpString = randomNumber.toString();
+
+  while (otpString.length < 6) {
+    otpString = "0" + otpString;
+  }
+
+  return otpString;
 };
 
 const hashPassword = (str) => {
