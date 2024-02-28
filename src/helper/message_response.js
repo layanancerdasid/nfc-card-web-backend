@@ -18,6 +18,9 @@ const authMessage = {
   failRegister: "Gagal registrasi, silakan coba lagi",
 };
 
+const unauthorized = "Tidak memiliki otorisasi";
+const forbiddenAccess = "Tidak memiliki izin";
+const invalidTokenJWT = "Token akses invalid";
 const emailNotVerified = "Email belum terverifikasi";
 const emailVerified = "Berhasil verifikasi email";
 const cardVerified = "Berhasil verifikasi kartu";
@@ -58,6 +61,9 @@ const fieldRequired = (str) => {
 };
 
 module.exports = {
+  forbiddenAccess,
+  unauthorized,
+  invalidTokenJWT,
   maxInput,
   emailBodyMsgForgot,
   emailBodyMsgRegis,

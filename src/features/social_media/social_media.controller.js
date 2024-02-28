@@ -2,7 +2,12 @@ const { validate } = require("../../core/validation");
 const {
   socialMediaValidation,
 } = require("../../core/validation/social_media.validation");
-const { responseJSON, getURL, basePath } = require("../../helper/app");
+const {
+  responseJSON,
+  getURL,
+  basePath,
+  paginateResp,
+} = require("../../helper/app");
 const { errorBind, successMessage } = require("../../helper/message_response");
 const {
   createSocMedService,
@@ -28,12 +33,12 @@ const getAllSocMed = async (req, res) => {
 
     const totalPage = Math.ceil(resultCount / per_page);
 
-    return responseJSON(res, 200, successMessage.getSuccess, {
-      page: page - 0,
-      total_page: totalPage,
-      total_data: resultCount,
-      data: result,
-    });
+    return responseJSON(
+      res,
+      200,
+      successMessage.getSuccess,
+      paginateResp(page, totalPage, resultCount, result)
+    );
   } catch (error) {
     return responseJSON(res, 500, errorBind(error.message));
   }

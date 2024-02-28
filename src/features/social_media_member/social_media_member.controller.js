@@ -5,6 +5,7 @@ const {
   errorBind,
   successMessage,
   isExist,
+  notFound,
 } = require("../../helper/message_response");
 const prisma = require("../../core/config/db");
 const {
@@ -57,7 +58,7 @@ const createSocMed = async (req, res) => {
       },
     });
 
-    if (isExistsSocmed != {}) {
+    if (isExistsSocmed != null) {
       return responseJSON(res, 400, isExist("Sosial media"));
     }
 
@@ -80,6 +81,14 @@ const updateSocmed = async (req, res) => {
     const errorValidation = validate(socialMediaMemberValidation, payload);
     if (errorValidation !== null)
       return responseJSON(res, 400, errorValidation);
+
+    const data = await prisma.socialMediaUser.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (data == null) return responseJSON(res, 400, notFound);
 
     const r = await prisma.socialMediaUser.update({
       where: {

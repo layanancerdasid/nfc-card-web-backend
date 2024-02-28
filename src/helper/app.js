@@ -12,15 +12,26 @@ const nodeMailer = require("nodemailer");
 const { htmlTemplate } = require("./template_send_email");
 
 const secret = process.env.JWT_SECRET;
+
 const baseUrl = (req) => {
   return req.protocol + "://" + req.get("host");
 };
+
 const responseJSON = (res, code, msg, data = {}) => {
   return res.status(code).send({
     code: code ?? 200,
     msg: msg ?? "",
     data: data ?? {},
   });
+};
+
+const paginateResp = (page, total_page, total_data, data) => {
+  return {
+    page: page - 0,
+    total_page,
+    total_data,
+    data,
+  };
 };
 
 const getURL = (req) => {
@@ -65,6 +76,7 @@ const hashJWTToken = (data) => {
         email: data.email,
         birthday: data.birthday,
         address: data.address,
+        role: data.role,
         is_active: data.is_active,
       },
     },
@@ -115,6 +127,7 @@ const sendEmail = async (req, subject, to, payload, attachments) => {
 };
 
 module.exports = {
+  paginateResp,
   sendEmail,
   baseUrl,
   getToken,

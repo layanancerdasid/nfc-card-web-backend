@@ -18,6 +18,7 @@ const {
   baseUrl,
   generateRandromStr,
   sendEmail,
+  paginateResp,
 } = require("../../helper/app");
 const {
   successMessage,
@@ -48,9 +49,40 @@ const {
 
 const getAllUser = async (req, res) => {
   try {
-    responseJSON(res, 200, "OKE");
+    const page = req.params.page || 1;
+
+    const per_page = req.params.per_page || 10;
+
+    const skip = (page - 1) * per_page;
+
+    const searchQuery = req.params.search || "";
+
+    const isActive = req.params.is_active || false;
+
+    const result = await prisma.user.findMany({
+      take: per_page,
+      skip,
+      where: {
+        OR: [{ name: { contains: searchQuery }, is_active: isActive }],
+      },
+    });
+
+    const resultCount = await prisma.user.count({
+      where: {
+        OR: [{ name: { contains: searchQuery }, is_active: isActive }],
+      },
+    });
+
+    const totalPage = Math.ceil(resultCount / per_page);
+
+    return responseJSON(
+      res,
+      200,
+      successMessage.getSuccess,
+      paginateResp(page, totalPage, resultCount, result)
+    );
   } catch (error) {
-    responseJSON(res, 500, "TIDAK OKE");
+    return responseJSON(res, 500, "TIDAK OKE");
   }
 };
 
