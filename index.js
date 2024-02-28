@@ -5,7 +5,11 @@ const cors = require("cors");
 const port = 5000;
 const app = express();
 var corsOptions = {
-  origin: ["http://103.152.119.203:3000", "http://localhost:3000"],
+  origin: [
+    "http://103.152.119.203:3000",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+  ],
   optionsSuccessStatus: 200, // For legacy browser support
 };
 app.use(cors(corsOptions));
