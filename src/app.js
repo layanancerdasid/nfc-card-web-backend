@@ -6,8 +6,7 @@ dotenv.config();
 
 const app = express();
 const corsOptions = {
-  origin: "http://127.0.0.1:9090",
-  optionsSuccessStatus: 200,
+  origin: "*",
 };
 
 app.use(cors(corsOptions));

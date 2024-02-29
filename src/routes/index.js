@@ -20,6 +20,7 @@ router.get("/", (_, res) => {
 router.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
+  //CEK ROUTE JIKA TIDAK ADA
   const definedRoutes = router.stack
     .filter((layer) => layer.route)
     .map((layer) => layer.route.path);
@@ -28,7 +29,6 @@ router.use((req, res, next) => {
     console.log(`Route ${req.baseUrl} not found`);
     return responseJSON(res, 404, urlNotFound);
   }
-
   next();
 });
 
