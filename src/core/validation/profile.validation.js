@@ -11,6 +11,8 @@ const profileValidation = Joi.object({
     "any.required": "No telepon wajib diisi.",
   }),
   address: Joi.string().optional(),
+  bio: Joi.string().optional(),
+  position: Joi.string().optional(),
 });
 
 module.exports = {

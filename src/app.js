@@ -5,6 +5,7 @@ const router = require("./routes/index");
 dotenv.config();
 
 const app = express();
+
 const corsOptions = {
   origin: "*",
 };

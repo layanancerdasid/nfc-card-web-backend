@@ -17,25 +17,31 @@ router.get("/", (_, res) => {
   res.status(200).send("Welcome to API");
 });
 
-router.use((req, res, next) => {
-  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+// router.use((req, res, next) => {
+//   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
-  //CEK ROUTE JIKA TIDAK ADA
-  const definedRoutes = router.stack
-    .filter((layer) => layer.route)
-    .map((layer) => layer.route.path);
+//CEK ROUTE JIKA TIDAK ADA
+// const definedRoutes = router.stack
+//   .filter((layer) => layer.route)
+//   .map((layer) => layer.route.path);
 
-  if (!definedRoutes.includes(req.url)) {
-    console.log(`Route ${req.baseUrl} not found`);
-    return responseJSON(res, 404, urlNotFound);
-  }
-  next();
-});
+// if (!definedRoutes.includes(req.url)) {
+//   console.log(`Route ${req.url} not found`);
+//   return responseJSON(res, 404, urlNotFound);
+// }
+// next();
+// });
 
 // ROUTER MEMBER
 router.post("/member/login", authController.loginMember);
 
-router.put("/member/profile", authController.updateProfileMember);
+router.post("/member/check/:card_number", authController.isRegisteredMember);
+
+router.put(
+  "/member/profile",
+  memberMiddleware,
+  authController.updateProfileMember
+);
 
 router.post("/member/register", userController.register);
 

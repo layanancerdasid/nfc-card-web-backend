@@ -1,5 +1,10 @@
 const prisma = require("../../core/config/db");
-const { responseJSON, hashJWTToken } = require("../../helper/app");
+const {
+  responseJSON,
+  hashJWTToken,
+
+  toISODate,
+} = require("../../helper/app");
 const jwt = require("jsonwebtoken");
 const {
   payloadLoginWrong,
@@ -102,25 +107,61 @@ const loginAdmin = async (req, res) => {
   }
 };
 
+const isRegisteredMember = async (req, res) => {
+  try {
+    const card_number = req.params;
+
+    const user = prisma.cardUser.findFirst({
+      where: {
+        id: card_number,
+      },
+    });
+
+    if (user == null)
+      return responseJSON(res, 200, successMessage.getSuccess, {
+        is_register: false,
+      });
+    return responseJSON(res, 200, successMessage.getSuccess, {
+      is_register: true,
+    });
+  } catch (error) {
+    return responseJSON(res, 500, errorBind(error.message));
+  }
+};
+
 const updateProfileMember = async (req, res) => {
   try {
     const payload = req.body;
     const token = req.headers.authorization?.split(" ")[1];
 
+    let user = null;
     const errorValidation = validate(profileValidation, payload);
 
     if (errorValidation !== null)
       return responseJSON(res, 400, errorValidation);
 
-    jwt.verify(token, process.env.JWT_SECRET, async function (_, decoded) {
-      const userRole = decoded.data;
+    jwt.verify(token, process.env.JWT_SECRET, function (_, decoded) {
+      user = decoded.data;
+    });
 
-      await prisma.user.update({
-        where: {
-          id: userRole.id,
-        },
-        data: payload,
-      });
+    payload.birthday = toISODate(payload.birthday);
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        name: payload.name,
+        birthday: payload.birthday,
+        phone_number: payload.phone_number
+          ? payload.phone_number
+          : user.phone_number,
+        phone_number_business: payload.phone_number_business
+          ? payload.phone_number_business
+          : user.phone_number_business,
+        bio: payload.bio ? payload.bio : user.bio,
+        position: payload.position ? payload.position : user.position,
+      },
     });
 
     return responseJSON(res, 200, successMessage.updateSuccess, payload);
@@ -129,4 +170,9 @@ const updateProfileMember = async (req, res) => {
   }
 };
 
-module.exports = { loginMember, loginAdmin, updateProfileMember };
+module.exports = {
+  loginMember,
+  loginAdmin,
+  updateProfileMember,
+  isRegisteredMember,
+};

@@ -11,21 +11,25 @@ datasource db {
 }
 
 model User {
-  id              String            @id @default(cuid())
-  name            String            @db.VarChar(50)
-  birthday        DateTime          @db.Date
-  email           String            @db.VarChar(50)
-  password        String            @db.VarChar(255)
-  address         String            @db.VarChar(255)
-  is_active       Boolean           @default(false) @db.TinyInt()
-  email_verified  String?           @db.VarChar(50)
-  token           String?           @db.VarChar(50)
-  otp             String?           @db.Char(6)
-  image           String?           @db.VarChar(255)
-  created_at      DateTime          @default(now())
-  updated_at      DateTime          @updatedAt
-  CardUser        CardUser[]
-  SocialMediaUser SocialMediaUser[]
+  id                    String            @id @default(cuid())
+  name                  String            @db.VarChar(50)
+  birthday              DateTime          @db.Date
+  email                 String            @db.VarChar(50)
+  password              String            @db.VarChar(255)
+  address               String            @db.VarChar(255)
+  is_active             Boolean           @default(false) @db.TinyInt()
+  email_verified        String?           @db.VarChar(50)
+  bio                   String?           @db.VarChar(100)
+  phone_number          String?           @db.VarChar(15)
+  phone_number_business String?           @db.VarChar(15)
+  position              String?           @db.VarChar(100)
+  token                 String?           @db.VarChar(50)
+  otp                   String?           @db.Char(6)
+  image                 String?           @db.VarChar(255)
+  created_at            DateTime          @default(now())
+  updated_at            DateTime          @updatedAt
+  CardUser              CardUser[]
+  SocialMediaUser       SocialMediaUser[]
 
   @@map("users")
 }
