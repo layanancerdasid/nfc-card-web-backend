@@ -5,13 +5,12 @@ const router = require("./routes/index");
 dotenv.config();
 
 const app = express();
+const corsOptions = {
+  origin: "http://127.0.0.1:9090",
+  optionsSuccessStatus: 200,
+};
 
-app.use(
-  cors({
-    origin: "http://103.152.119.203:3002",
-    credentials: true,
-  })
-);
+app.use(cors(corsOptions));
 
 app.use(express.static("public"));
 

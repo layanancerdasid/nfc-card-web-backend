@@ -1,7 +1,6 @@
+const dotenv = require("dotenv");
 
-const dotenv = require('dotenv');
-
-const process = require('node:process');
+const process = require("node:process");
 
 dotenv.config();
 

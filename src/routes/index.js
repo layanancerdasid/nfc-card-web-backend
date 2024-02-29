@@ -8,6 +8,8 @@ const cardController = require("../features/card/card.controller");
 const socMedController = require("../features/social_media/social_media.controller");
 const socMedMemberController = require("../features/social_media_member/social_media_member.controller");
 const { memberMiddleware, adminMiddleware } = require("../middleware");
+const { responseJSON } = require("../helper/app");
+const { urlNotFound } = require("../helper/message_response");
 
 const router = express.Router();
 
@@ -15,9 +17,18 @@ router.get("/", (_, res) => {
   res.status(200).send("Welcome to API");
 });
 
-// Middleware untuk logging request
-router.use((req, _, next) => {
+router.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+
+  const definedRoutes = router.stack
+    .filter((layer) => layer.route)
+    .map((layer) => layer.route.path);
+
+  if (!definedRoutes.includes(req.url)) {
+    console.log(`Route ${req.baseUrl} not found`);
+    return responseJSON(res, 404, urlNotFound);
+  }
+
   next();
 });
 
