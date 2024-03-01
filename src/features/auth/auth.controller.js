@@ -50,8 +50,15 @@ const loginMember = async (req, res) => {
 
     if (!isVerifiedPwd) return responseJSON(res, 400, payloadLoginWrong);
 
+    const cardNumber = await prisma.cardUser.findFirst({
+      where: {
+        user_id: user.id,
+      },
+    });
+
     const profile = {
       id: user.id,
+      card_number: cardNumber.id,
       name: user.name,
       email: user.email,
       birthday: user.birthday,
