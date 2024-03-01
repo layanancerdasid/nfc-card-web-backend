@@ -86,11 +86,7 @@ router.post("/admin/login", authController.loginAdmin);
 router.get("/admin/member", adminMiddleware, userController.getAllUser);
 
 // SOCIAL MEDIA
-router.get(
-  "/admin/social_media",
-  adminMiddleware,
-  socMedController.getAllSocMed
-);
+router.get("/admin/social_media", socMedController.getAllSocMed);
 
 router.post(
   "/admin/social_media",
